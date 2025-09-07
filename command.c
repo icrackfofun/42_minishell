@@ -6,11 +6,11 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 16:07:55 by psantos-          #+#    #+#             */
-/*   Updated: 2025/09/05 00:34:08 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/09/06 18:32:08 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "executor.h"
+#include "minishell.h"
 
 /***Step 1: Execute a single command with no redirections**
 - **Goal:** Run a command like `ls -l` with no pipes or redirections.
@@ -22,7 +22,7 @@
 	5. In parent: `waitpid()` and store exit status.
 - ✅ Test: `ls`, `pwd`, `echo hello`.*/
 
-static int	exec_external(t_command *cmd, t_shell *shell)
+static int	exec_external(t_ast *cmd, t_info *info)
 {
 	pid_t	pid;
 	int		status;
@@ -36,8 +36,9 @@ static int	exec_external(t_command *cmd, t_shell *shell)
 	}
 	if (pid == 0)
 	{
-		path = get_path(cmd);
-		execve(path, cmd->argv, shell->envp);
+		path = get_path(info, cmd);
+		env_list_to_array(info);
+		execve(path, cmd->argv, info->env_array);
 		perror("execve");
 		exit(127);
 	}
@@ -49,7 +50,7 @@ static int	exec_external(t_command *cmd, t_shell *shell)
 	return (0);
 }
 
-int	exec_command(t_command *cmd, t_shell *shell)
+int	exec_command(t_ast *cmd, t_info *info)
 {
 	int	status;
 
@@ -59,7 +60,7 @@ int	exec_command(t_command *cmd, t_shell *shell)
 	//	handle_redirections(cmd->redirs);
 	//if (cmd->is_builtin == 1)
 	//    return exec_builtin(cmd, shell);
-	status = exec_external(cmd, shell);
+	status = exec_external(cmd, info);
 	//restore_redirections();
 	return (status);
 }

@@ -3,18 +3,19 @@ NAME = minishell
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
-SRCS = main.c command.c path.c
+SRCS = main.c env.c env_ops.c clean.c command.c path.c
 OBJS = $(SRCS:.c=.o)
 
 MAKE = make -C
 LIBFT_PATH = libft
 LIBFT = -L $(LIBFT_PATH) -lft
+READLINE = -lreadline
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
 	$(MAKE) $(LIBFT_PATH) all
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(READLINE)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@

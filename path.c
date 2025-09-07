@@ -6,11 +6,11 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 22:56:15 by psantos-          #+#    #+#             */
-/*   Updated: 2025/09/04 23:33:03 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/09/06 17:58:17 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "executor.h"
+#include "minishell.h"
 
 static char	*join_path(const char *dir, const char *cmd)
 {
@@ -67,7 +67,7 @@ static char	*search_in_path(char *path_copy, const char *cmd)
 	return (NULL);
 }
 
-char	*get_path(t_command *cmd)
+char	*get_path(t_info *info, t_ast *cmd)
 {
 	char	*path_env;
 	char	*copy;
@@ -77,7 +77,7 @@ char	*get_path(t_command *cmd)
 		return (NULL);
 	if (cmd->argv[0][0] == '/' || cmd->argv[0][0] == '.')
 		return (ft_strdup(cmd->argv[0]));
-	path_env = getenv("PATH");
+	path_env = get_env_value(info->env_list, "PATH");
 	if (!path_env)
 		return (NULL);
 	copy = ft_strdup(path_env);

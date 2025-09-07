@@ -2,7 +2,8 @@ CC = cc
 CFLAGS = -Wall -Werror -Wextra
 NAME = libft.a
 
-SRC = 	ft_strlcpy.c ft_strdup.c ft_strjoin.c ft_strlen.c
+SRC = 	ft_strlcpy.c ft_strdup.c ft_strjoin.c ft_strlen.c ft_strchr.c ft_strndup.c \
+		ft_calloc.c ft_strcmp.c
 
 OBJ = $(SRC:.c=.o)
 

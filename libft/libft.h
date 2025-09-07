@@ -6,7 +6,7 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 23:37:03 by psantos-          #+#    #+#             */
-/*   Updated: 2025/09/05 00:07:28 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/09/06 16:31:20 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,12 @@
 # include <unistd.h>
 
 size_t	ft_strlen(const char *s);
+int		ft_strcmp(const char *s1, const char *s2);
+void	*ft_calloc(size_t count, size_t size);
+char	*ft_strchr(const char *s, int c);
 char	*ft_strjoin(char const *s1, char const *s2);
 size_t	ft_strlcpy(char *dest, const char *src, size_t dstsize);
 char	*ft_strdup(const char *s);
+char	*ft_strndup(const char *s, size_t n);
 
 #endif

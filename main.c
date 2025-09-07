@@ -6,7 +6,7 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 18:20:32 by psantos-          #+#    #+#             */
-/*   Updated: 2025/09/07 01:49:27 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/09/07 01:55:16 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,12 @@ int	main(int argc, char **argv, char **envp)
 			executor(info.tree, &info);
 		printf("\n");
 	}*/
-	t_ast	*node;
 
+	t_ast	*node;
 	// Init shell info
 	info.env_list = env_init(envp);
 	info.last_status = 0;
 	info.tree = NULL;
-
 	// Create node
 	node = malloc(sizeof(t_ast));
 	node->type = NODE_COMMAND;
@@ -64,14 +63,11 @@ int	main(int argc, char **argv, char **envp)
 	node->is_builtin = 0;
 	node->left = NULL;
 	node->right = NULL;
-
 	info.tree = node;
-
 	// Execute
 	info.last_status = exec_command(info.tree, &info);
 	printf("\n");
 	printf("Exit status: %d\n", info.last_status);
 
-	// Cleanup
 	clean_shell(&info);
 }

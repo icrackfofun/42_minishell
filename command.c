@@ -6,21 +6,11 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 16:07:55 by psantos-          #+#    #+#             */
-/*   Updated: 2025/09/06 18:32:08 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/09/07 01:15:17 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/***Step 1: Execute a single command with no redirections**
-- **Goal:** Run a command like `ls -l` with no pipes or redirections.
-- **Tasks:**
-	1. Create `executor(t_ast *node)` function.
-	2. Check if `node->type == NODE_COMMAND`.
-	3. Fork a child process.
-	4. In child: call `execve()` with `argv` and `envp`.
-	5. In parent: `waitpid()` and store exit status.
-- ✅ Test: `ls`, `pwd`, `echo hello`.*/
 
 static int	exec_external(t_ast *cmd, t_info *info)
 {

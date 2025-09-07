@@ -6,7 +6,7 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 18:20:32 by psantos-          #+#    #+#             */
-/*   Updated: 2025/09/07 01:10:02 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/09/07 01:48:16 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	main(int argc, char **argv, char **envp)
 		free(line);
 		if (info.tree)
 			executor(info.tree, &info);
+		printf("\n");
 	}*/
 	t_ast	*node;
 
@@ -68,6 +69,7 @@ int	main(int argc, char **argv, char **envp)
 
 	// Execute
 	info.last_status = exec_command(info.tree, &info);
+	printf("\n");
 	printf("Exit status: %d\n", info.last_status);
 
 	// Cleanup

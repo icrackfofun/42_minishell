@@ -6,7 +6,7 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 15:43:11 by psantos-          #+#    #+#             */
-/*   Updated: 2025/09/07 01:11:43 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/09/07 01:42:11 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,18 @@ typedef enum e_node_type
 	NODE_PIPE
 }	t_node_type;
 
+typedef enum e_redir_type
+{
+	REDIR_INPUT,      // <
+	REDIR_OUTPUT,     // >
+	REDIR_APPEND,     // >>
+	REDIR_HEREDOC     // <<
+}	t_redir_type;
+
+
 typedef struct s_redir
 {
-	int				type;
+	t_redir_type	type;
 	char			*target;
 	struct s_redir	*next;
 }	t_redir;
@@ -76,6 +85,7 @@ typedef struct s_info
 }*/
 void	clean_shell(t_info *info);
 void	free_ast(t_ast *node);
+void	free_env_array(char **arr);
 
 //env
 void	env_list_to_array(t_info *info);

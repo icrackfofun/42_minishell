@@ -6,13 +6,13 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 14:58:27 by psantos-          #+#    #+#             */
-/*   Updated: 2025/09/06 19:09:05 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/09/07 01:41:53 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	free_env_array(char **arr)
+void	free_env_array(char **arr)
 {
 	int	i;
 
@@ -62,7 +62,6 @@ void	env_list_to_array(t_info *info)
 	int		i;
 	int		size;
 
-	info->env_array = NULL;
 	free_env_array(info->env_array);
 	size = env_count(info->env_list);
 	info->env_array = malloc(sizeof(char *) * (size + 1));

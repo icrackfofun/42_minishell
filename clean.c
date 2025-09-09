@@ -6,7 +6,7 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 15:37:01 by psantos-          #+#    #+#             */
-/*   Updated: 2025/09/07 01:42:53 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/09/09 16:15:59 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ void	clean_shell(t_info *info)
 		free_ast(info->tree);
 	if (info->env_array)
 		free_env_array(info->env_array);
+	if (info->child_pids)
+		free(info->child_pids);
 	if (info->env_list)
 	{
 		while (info->env_list)

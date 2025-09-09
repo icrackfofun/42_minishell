@@ -6,51 +6,63 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 16:07:55 by psantos-          #+#    #+#             */
-/*   Updated: 2025/09/07 01:15:17 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/09/08 20:12:53 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	exec_external(t_ast *cmd, t_info *info)
+// static int exec_builtin(t_ast *cmd, t_info *info)
+// {
+
+// }
+
+static void	exec_child(t_ast *cmd, t_info *info)
 {
-	pid_t	pid;
-	int		status;
 	char	*path;
 
+	path = get_path(info, cmd);
+	env_list_to_array(info);
+	// if (cmd->redirs)
+	// 	handle_redirections(cmd->redirs);
+	execve(path, cmd->argv, info->env_array);
+	exit_error("execve", 127);
+}
+
+static void	exec_external(t_ast *cmd, t_info *info, int root)
+{
+	pid_t	pid;
+	char	*path;
+
+	if (!root)
+		exec_child(cmd, info);
 	pid = fork();
 	if (pid < 0)
 	{
-		perror("fork");
-		return (1);
+		fork_error(info);
+		return ;
 	}
 	if (pid == 0)
 	{
 		path = get_path(info, cmd);
 		env_list_to_array(info);
+		// if (cmd->redirs)
+		// 	handle_redirections(cmd->redirs);
 		execve(path, cmd->argv, info->env_array);
-		perror("execve");
-		exit(127);
+		exit_error("execve", 127);
 	}
-	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	else if (WIFSIGNALED(status))
-		return (128 + WTERMSIG(status));
-	return (0);
+	info->child_pids[info->child_count++] = pid;
 }
 
-int	exec_command(t_ast *cmd, t_info *info)
+void	exec_command(t_ast *cmd, t_info *info, int root)
 {
-	int	status;
-
 	if (!cmd || !cmd->argv || !cmd->argv[0])
-		return (1);
-	//if (cmd->redirs)
-	//	handle_redirections(cmd->redirs);
+	{
+		info->last_status = 1;
+		return ;
+	}
 	//if (cmd->is_builtin == 1)
-	//    return exec_builtin(cmd, shell);
-	status = exec_external(cmd, info);
+		//return (exec_builtin(cmd, info));
+	exec_external(cmd, info, root);
 	//restore_redirections();
-	return (status);
 }

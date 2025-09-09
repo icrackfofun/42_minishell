@@ -3,7 +3,7 @@ NAME = minishell
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
-SRCS = main.c env.c env_ops.c clean.c command.c path.c
+SRCS = main.c clean.c error.c env.c env_ops.c executor.c flatten.c pipe.c command.c path.c 
 OBJS = $(SRCS:.c=.o)
 
 MAKE = make -C

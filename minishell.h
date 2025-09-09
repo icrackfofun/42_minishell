@@ -6,7 +6,7 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 15:43:11 by psantos-          #+#    #+#             */
-/*   Updated: 2025/09/09 16:36:34 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/09/09 16:38:49 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 # define MINISHELL_H
 
 # include "libft/libft.h"
-# include <unistd.h>   // execve, fork
-# include <sys/wait.h> // waitpid
-# include <stdio.h>    // perror
-# include <stdlib.h>   // exit
+# include <unistd.h>
+# include <sys/wait.h>
+# include <stdio.h>
+# include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 

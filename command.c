@@ -6,7 +6,7 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 16:07:55 by psantos-          #+#    #+#             */
-/*   Updated: 2025/09/08 20:12:53 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/09/10 23:25:46 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,15 @@ static void	exec_child(t_ast *cmd, t_info *info)
 
 	path = get_path(info, cmd);
 	env_list_to_array(info);
-	// if (cmd->redirs)
-	// 	handle_redirections(cmd->redirs);
+	if (cmd->redirs)
+		handle_redirections(cmd->redirs, info);
+	if (info->heredoc)
+	{
+		unlink(info->heredoc);
+		free (info->heredoc);
+	}
 	execve(path, cmd->argv, info->env_array);
-	exit_error("execve", 127);
+	exit_error("execve", 1, info);
 }
 
 static void	exec_external(t_ast *cmd, t_info *info, int root)
@@ -39,24 +44,24 @@ static void	exec_external(t_ast *cmd, t_info *info, int root)
 	pid = fork();
 	if (pid < 0)
 	{
-		fork_error(info);
+		parent_error("fork", info);
 		return ;
 	}
 	if (pid == 0)
 	{
 		path = get_path(info, cmd);
 		env_list_to_array(info);
-		// if (cmd->redirs)
-		// 	handle_redirections(cmd->redirs);
+		if (cmd->redirs)
+			handle_redirections(cmd->redirs, info);
 		execve(path, cmd->argv, info->env_array);
-		exit_error("execve", 127);
+		exit_error("execve", 1, info);
 	}
 	info->child_pids[info->child_count++] = pid;
 }
 
 void	exec_command(t_ast *cmd, t_info *info, int root)
 {
-	if (!cmd || !cmd->argv || !cmd->argv[0])
+	if ((!cmd || !cmd->argv || !cmd->argv[0]) && root)
 	{
 		info->last_status = 1;
 		return ;
@@ -64,5 +69,4 @@ void	exec_command(t_ast *cmd, t_info *info, int root)
 	//if (cmd->is_builtin == 1)
 		//return (exec_builtin(cmd, info));
 	exec_external(cmd, info, root);
-	//restore_redirections();
 }

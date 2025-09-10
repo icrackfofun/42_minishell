@@ -1,1 +1,3 @@
-Hello My name is Pedro Pedro
+Hello My name is Pedro 
+Pedro is my name
+Bye Bye Hello

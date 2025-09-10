@@ -6,11 +6,27 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 15:37:01 by psantos-          #+#    #+#             */
-/*   Updated: 2025/09/09 16:15:59 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/09/10 22:50:54 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	free_env(t_env *env)
+{
+	t_env	*tmp;
+
+	while (env)
+	{
+		tmp = env->next;
+		if (env->key)
+			free(env->key);
+		if (env->value)
+			free(env->value);
+		free(env);
+		env = tmp;
+	}
+}
 
 static void	free_redirs(t_redir *redir)
 {
@@ -53,8 +69,6 @@ void	free_ast(t_ast *node)
 
 void	clean_shell(t_info *info)
 {
-	t_env	*tmp;
-
 	if (!info)
 		return ;
 	if (info->tree)
@@ -64,17 +78,6 @@ void	clean_shell(t_info *info)
 	if (info->child_pids)
 		free(info->child_pids);
 	if (info->env_list)
-	{
-		while (info->env_list)
-		{
-			tmp = info->env_list->next;
-			if (info->env_list->key)
-				free(info->env_list->key);
-			if (info->env_list->value)
-				free(info->env_list->value);
-			free(info->env_list);
-			info->env_list = tmp;
-		}
-	}
+		free_env(info->env_list);
 	//clear_history();
 }

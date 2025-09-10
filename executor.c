@@ -6,7 +6,7 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/07 01:56:53 by psantos-          #+#    #+#             */
-/*   Updated: 2025/09/09 16:15:34 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/09/10 23:38:57 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,31 @@
 
 static void	reap_children(t_info *info)
 {
-	int status;
-	int i;
+	int	status;
+	int	i;
 
 	i = 0;
-	while(i < info->child_count)
+	while (i < info->child_count)
 	{
 		if (waitpid(info->child_pids[i], &status, 0) > 0)
 		{
 			if (WIFEXITED(status))
-				info->last_status = WEXITSTATUS(status);
-			else if (WIFSIGNALED(status))
-				info->last_status = 128 + WTERMSIG(status);
+			{
+				if (WEXITSTATUS(status) != 0)
+					info->last_status = 1;
+				else
+					info->last_status = 0;
+			}
+			else
+				info->last_status = 1;
 		}
 		i++;
 	}
 	info->child_count = 0;
 }
 
-void executor(t_ast *node, t_info *info)
+
+int	executor(t_ast *node, t_info *info)
 {
 	t_ast	**cmds;
 	int		count;
@@ -40,22 +46,20 @@ void executor(t_ast *node, t_info *info)
 	if (node->type == NODE_COMMAND)
 	{
 		info->child_pids = malloc(sizeof(pid_t));
-		exec_command(node, info, 1);
 		if (!info->child_pids)
-		{
-			perror("malloc");
-			return ;
-		}
+			return (parent_error("malloc", info), 1);
+		exec_command(node, info, 1);
 	}
 	else if (node->type == NODE_PIPE)
 	{
-		cmds = flatten_pipeline(node, &count, info);
-		if (cmds)
-		{
-			exec_pipeline(cmds, count, info, -1);
-			free(cmds);
-			free(info->child_pids);
-		}
+		cmds = flatten_pipeline(node, &count);
+		info->child_pids = malloc(sizeof(pid_t) * (count));
+		if (!info->child_pids)
+			return (parent_error("malloc", info), 1);
+		if (!cmds)
+			return (1);
+		exec_pipeline(cmds, count, info, -1);
+		free(cmds);
 	}
-	reap_children(info);
+	return (reap_children(info), 0);
 }

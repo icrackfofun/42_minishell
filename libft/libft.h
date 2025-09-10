@@ -6,7 +6,7 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 23:37:03 by psantos-          #+#    #+#             */
-/*   Updated: 2025/09/06 16:31:20 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/09/10 21:12:19 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 size_t	ft_strlen(const char *s);
 int		ft_strcmp(const char *s1, const char *s2);
+char	*ft_itoa(int n);
 void	*ft_calloc(size_t count, size_t size);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strjoin(char const *s1, char const *s2);

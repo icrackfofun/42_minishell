@@ -6,7 +6,7 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 13:09:37 by psantos-          #+#    #+#             */
-/*   Updated: 2025/09/09 16:21:26 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/09/10 23:24:38 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,14 @@ static void	flatten_pipeline_rec(t_ast *node, t_ast **cmds, int *count)
 		cmds[(*count)++] = node;
 }
 
-t_ast	**flatten_pipeline(t_ast *root, int *out_count, t_info *info)
+t_ast	**flatten_pipeline(t_ast *root, int *out_count)
 {
 	t_ast	**cmds;
 	int		i;
 
 	*out_count = count_commands(root);
 	cmds = malloc(sizeof(t_ast *) * (*out_count));
-	info->child_pids = malloc(sizeof(pid_t) * (*out_count));
-	if (!cmds || !info->child_pids)
+	if (!cmds)
 		return (perror("malloc"), NULL);
 	i = 0;
 	flatten_pipeline_rec(root, cmds, &i);

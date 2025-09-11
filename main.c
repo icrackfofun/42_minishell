@@ -6,7 +6,7 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 18:20:32 by psantos-          #+#    #+#             */
-/*   Updated: 2025/09/10 23:45:32 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/09/11 17:05:38 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,43 @@
 
 volatile sig_atomic_t	g_last_signal;
 
-static void	info_init(t_info *info, char **envp)
-{
-	info->env_list = env_init(envp);
-	info->env_array = NULL;
-	info->last_status = 0;
-	info->tree = NULL;
-	info->child_count = 0;
-	info->heredoc = NULL;
-}
+// static void	info_init(t_info *info, char **envp)
+// {
+// 	info->env_list = env_init(envp);
+// 	info->env_array = NULL;
+// 	info->last_status = 0;
+// 	info->tree = NULL;
+// 	info->child_pids = NULL;
+// 	info->child_count = 0;
+// }
+
+// int	main(int argc, char **argv, char **envp)
+// {
+// 	t_info	info;
+// 	char	*line;
+
+// 	(void)argc;
+// 	(void)argv;
+	
+// 	while (1)
+// 	{
+// 		info_init(&info, envp);
+// 		line = readline("minishell$ ");
+// 		if (!line) // Ctrl+D
+// 		{
+// 			printf("exit\n");
+// 			break ;
+// 		}
+// 		if (*line)
+// 			add_history(line);
+// 		//info.tree = parse(line);
+// 		free(line);
+// 		if (info.tree)
+// 			executor(info.tree, &info);
+// 		clean_shell(&info);
+// 	}
+// 	clean_shell(&info);
+// }
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -163,23 +191,49 @@ int	main(int argc, char **argv, char **envp)
 	// pipe_node->right = node_grep;
 	// info.tree = pipe_node;
 
-	// cat << EOF
-	t_ast *node;
-	t_redir *redir;
-	node = malloc(sizeof(t_ast));
-	node->type = NODE_COMMAND;
-	node->argv = malloc(2 * sizeof(char *));
-	node->argv[0] = ft_strdup("cat");
-	node->argv[1] = NULL;
-	node->is_builtin = 0;
-	node->left = NULL;
-	node->right = NULL;
-	redir = malloc(sizeof(t_redir));
-	redir->type = REDIR_HEREDOC;
-	redir->target = ft_strdup("EOF");
-	redir->next = NULL;
-	node->redirs = redir;
-	info.tree = node;
+	// Command: cat <<EOF | grep Hello > hello.txt
+	// left command: cat <<EOF
+	t_ast *left = malloc(sizeof(t_ast));
+	left->type = NODE_COMMAND;
+	left->argv = malloc(2 * sizeof(char *));
+	left->argv[0] = ft_strdup("cat");
+	left->argv[1] = NULL;
+	left->is_builtin = 0;
+	left->left = NULL;
+	left->right = NULL;
+	// heredoc redirection
+	t_redir *r1 = malloc(sizeof(t_redir));
+	r1->type = REDIR_HEREDOC;
+	r1->target = ft_strdup("EOF");
+	r1->next = NULL;
+	left->redirs = r1;
+	// right command: grep Hello > hello.txt
+	t_ast *right = malloc(sizeof(t_ast));
+	right->type = NODE_COMMAND;
+	right->argv = malloc(3 * sizeof(char *));
+	right->argv[0] = ft_strdup("grep");
+	right->argv[1] = ft_strdup("Hello");
+	right->argv[2] = NULL;
+	right->is_builtin = 0;
+	right->left = NULL;
+	right->right = NULL;
+	// output redirection
+	t_redir *r2 = malloc(sizeof(t_redir));
+	r2->type = REDIR_OUTPUT;
+	r2->target = ft_strdup("hello.txt");
+	r2->next = NULL;
+	right->redirs = r2;
+	// pipe node
+	t_ast *root = malloc(sizeof(t_ast));
+	root->type = NODE_PIPE;
+	root->argv = NULL;
+	root->is_builtin = 0;
+	root->left = left;
+	root->right = right;
+	root->redirs = NULL;
+	//set as root
+	info.tree = root;
+
 
 	// Execute
 	executor(info.tree, &info);

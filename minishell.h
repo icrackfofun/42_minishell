@@ -6,7 +6,7 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 15:43:11 by psantos-          #+#    #+#             */
-/*   Updated: 2025/09/10 23:24:47 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/09/11 16:19:47 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <fcntl.h>
+#include <dirent.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -72,7 +73,6 @@ typedef struct s_info
 	t_ast	*tree;
 	pid_t	*child_pids;
 	int		child_count;
-	char	*heredoc;
 }	t_info;
 
 //cleaner
@@ -91,7 +91,7 @@ void	free_ast(t_ast *node);
 void	free_env_array(char **arr);
 
 //error
-void	exit_error(char *message, int code, t_info *info);
+void	exit_error(char *message, int code);
 void	parent_error(char *message, t_info *info);
 
 //env
@@ -113,6 +113,7 @@ void	exec_pipeline(t_ast **cmds, int count, t_info *info, int input_fd);
 void	exec_command(t_ast *cmd, t_info *info, int root);
 
 //redirections
-void	handle_redirections(t_redir *redir, t_info *info);
+void	handle_redirections(t_redir *redir);
+void	prepare_heredocs(t_ast *cmd, t_info *info);
 
 #endif

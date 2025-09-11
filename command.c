@@ -6,7 +6,7 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 16:07:55 by psantos-          #+#    #+#             */
-/*   Updated: 2025/09/10 23:25:46 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/09/11 16:28:56 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,9 @@ static void	exec_child(t_ast *cmd, t_info *info)
 	path = get_path(info, cmd);
 	env_list_to_array(info);
 	if (cmd->redirs)
-		handle_redirections(cmd->redirs, info);
-	if (info->heredoc)
-	{
-		unlink(info->heredoc);
-		free (info->heredoc);
-	}
+		handle_redirections(cmd->redirs);
 	execve(path, cmd->argv, info->env_array);
-	exit_error("execve", 1, info);
+	exit_error("execve", 1);
 }
 
 static void	exec_external(t_ast *cmd, t_info *info, int root)
@@ -41,6 +36,8 @@ static void	exec_external(t_ast *cmd, t_info *info, int root)
 
 	if (!root)
 		exec_child(cmd, info);
+	if (cmd->redirs)
+			prepare_heredocs(cmd, info);
 	pid = fork();
 	if (pid < 0)
 	{
@@ -52,9 +49,9 @@ static void	exec_external(t_ast *cmd, t_info *info, int root)
 		path = get_path(info, cmd);
 		env_list_to_array(info);
 		if (cmd->redirs)
-			handle_redirections(cmd->redirs, info);
+			handle_redirections(cmd->redirs);
 		execve(path, cmd->argv, info->env_array);
-		exit_error("execve", 1, info);
+		exit_error("execve", 1);
 	}
 	info->child_pids[info->child_count++] = pid;
 }

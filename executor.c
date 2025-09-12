@@ -6,7 +6,7 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/07 01:56:53 by psantos-          #+#    #+#             */
-/*   Updated: 2025/09/11 00:04:46 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/09/11 18:09:46 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ static void	reap_children(t_info *info)
 	}
 	info->child_count = 0;
 }
-
 
 int	executor(t_ast *node, t_info *info)
 {

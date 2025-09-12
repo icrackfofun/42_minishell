@@ -6,7 +6,7 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 18:20:32 by psantos-          #+#    #+#             */
-/*   Updated: 2025/09/11 17:12:47 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/09/12 16:26:59 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,9 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	
+	info_init(&info, envp);
 	while (1)
 	{
-		info_init(&info, envp);
 		line = readline("minishell$ ");
 		if (!line) // Ctrl+D
 		{
@@ -47,7 +46,7 @@ int	main(int argc, char **argv, char **envp)
 		free(line);
 		if (info.tree)
 			executor(info.tree, &info);
-		clean_shell(&info);
+		clean_loop(&info);
 	}
 	clean_shell(&info);
 }
@@ -228,6 +227,40 @@ int	main(int argc, char **argv, char **envp)
 // 	// root->right = right;
 // 	// root->redirs = NULL;
 // 	// info.tree = root;
+	
+// 	// 1st command: echo hello > hello.txt
+// 	t_ast *cmd1 = malloc(sizeof(t_ast));
+// 	cmd1->type = NODE_COMMAND;
+// 	cmd1->argv = malloc(3 * sizeof(char *));
+// 	cmd1->argv[0] = ft_strdup("echo");
+// 	cmd1->argv[1] = ft_strdup("hello");
+// 	cmd1->argv[2] = NULL;
+// 	cmd1->is_builtin = 0;
+// 	cmd1->left = NULL;
+// 	cmd1->right = NULL;
+// 	t_redir *redir1 = malloc(sizeof(t_redir));
+// 	redir1->type = REDIR_OUTPUT;
+// 	redir1->target = ft_strdup("hello.txt");
+// 	redir1->next = NULL;
+// 	cmd1->redirs = redir1;
+// 	t_ast *cmd2 = malloc(sizeof(t_ast));
+// 	cmd2->type = NODE_COMMAND;
+// 	cmd2->argv = malloc(3 * sizeof(char *));
+// 	cmd2->argv[0] = ft_strdup("ls");
+// 	cmd2->argv[1] = ft_strdup("-l");
+// 	cmd2->argv[2] = NULL;
+// 	cmd2->is_builtin = 0;
+// 	cmd2->left = NULL;
+// 	cmd2->right = NULL;
+// 	cmd2->redirs = NULL;
+// 	t_ast *pipe_node = malloc(sizeof(t_ast));
+// 	pipe_node->type = NODE_PIPE;
+// 	pipe_node->argv = NULL;
+// 	pipe_node->redirs = NULL;
+// 	pipe_node->is_builtin = 0;
+// 	pipe_node->left = cmd1;
+// 	pipe_node->right = cmd2;
+// 	info.tree = pipe_node;
 
 // 	// Execute
 // 	executor(info.tree, &info);
